@@ -7,11 +7,12 @@ import {
   getArticleById,
   updateSummary,
   updateMemo,
-  updateMark,
-  updateRanking,
+  updateClassification,
+  updateExpection,
   updateKeyword,
   addArticle,
   deleteArticleById,
+  getArticleDetailsById,
 } from '../repository/news.js';
 
 const router = express.Router();
@@ -101,28 +102,34 @@ router.put('/memo/:id', async (req, res, next) => {
   }
 });
 
-// mark 수정
-router.put('/mark/:id', async (req, res, next) => {
+// classification 수정
+router.put('/classification/:id', async (req, res, next) => {
   const { id } = req.params;
-  const { mark } = req.body;
+  const { classification } = req.body;
   try {
-    const result = await updateMark(id, mark);
-    res.json({ message: 'Mark updated', affectedRows: result.affectedRows });
+    const result = await updateClassification(id, classification);
+    res.json({
+      message: 'Classification updated',
+      affectedRows: result.affectedRows,
+    });
   } catch (error) {
-    console.error('Error updating mark:', error); // 에러 로그 추가
+    console.error('Error updating classification:', error); // 에러 로그 추가
     res
       .status(500)
       .json({ message: 'Internal Server Error', error: error.message });
   }
 });
 
-// ranking 수정
-router.put('/ranking/:id', async (req, res, next) => {
+// expection 수정
+router.put('/expection/:id', async (req, res, next) => {
   const { id } = req.params;
-  const { ranking } = req.body;
+  const { expection } = req.body;
   try {
-    const result = await updateRanking(id, ranking);
-    res.json({ message: 'Ranking updated', affectedRows: result.affectedRows });
+    const result = await updateExpection(id, expection);
+    res.json({
+      message: 'Expection updated',
+      affectedRows: result.affectedRows,
+    });
   } catch (error) {
     next(error);
   }
@@ -160,6 +167,21 @@ router.delete('/:id', async (req, res, next) => {
     res.json({ message: 'Article deleted', affectedRows: result.affectedRows });
   } catch (error) {
     next(error);
+  }
+});
+
+// Route to get detailed data by ID (summary, keyword, classification, expection, memo)
+router.get('/articleDetails/:id', async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const articleDetails = await getArticleDetailsById(id);
+    if (articleDetails) {
+      res.json(articleDetails); // Return the article details
+    } else {
+      res.status(404).json({ message: 'Article not found' });
+    }
+  } catch (error) {
+    next(error); // Pass error to error handling middleware
   }
 });
 

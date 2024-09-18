@@ -81,20 +81,20 @@ export const updateMemo = async (id, memo) => {
   return result;
 };
 
-// mark 수정
-export const updateMark = async (id, mark) => {
-  const [result] = await pool.query('UPDATE news SET mark = ? WHERE id = ?', [
-    mark,
-    id,
-  ]);
+// classification 수정
+export const updateClassification = async (id, classification) => {
+  const [result] = await pool.query(
+    'UPDATE news SET classification = ? WHERE id = ?',
+    [classification, id]
+  );
   return result;
 };
 
-// ranking 수정
-export const updateRanking = async (id, ranking) => {
+// expection 수정
+export const updateExpection = async (id, expection) => {
   const [result] = await pool.query(
-    'UPDATE news SET ranking = ? WHERE id = ?',
-    [ranking, id]
+    'UPDATE news SET expection = ? WHERE id = ?',
+    [expection, id]
   );
   return result;
 };
@@ -131,4 +131,13 @@ export const addArticle = async ({
 export const deleteArticleById = async (id) => {
   const [result] = await pool.query('DELETE FROM news WHERE id = ?', [id]);
   return result;
+};
+
+// Get detailed data (summary, keyword, classification, expection, memo) by ID
+export const getArticleDetailsById = async (id) => {
+  const [rows] = await pool.query(
+    'SELECT summary, keyword, classification, expection, memo FROM news WHERE id = ?',
+    [id]
+  );
+  return rows[0]; // Return the first row (should be the only one)
 };
