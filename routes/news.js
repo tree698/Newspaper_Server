@@ -8,7 +8,7 @@ import {
   updateSummary,
   updateMemo,
   updateClassification,
-  updateExpection,
+  updateBackground,
   updateKeyword,
   addArticle,
   deleteArticleById,
@@ -121,13 +121,13 @@ router.put('/classification/:id', async (req, res, next) => {
 });
 
 // expection 수정
-router.put('/expection/:id', async (req, res, next) => {
+router.put('/background/:id', async (req, res, next) => {
   const { id } = req.params;
-  const { expection } = req.body;
+  const { background } = req.body;
   try {
-    const result = await updateExpection(id, expection);
+    const result = await updateBackground(id, background);
     res.json({
-      message: 'Expection updated',
+      message: 'Background updated',
       affectedRows: result.affectedRows,
     });
   } catch (error) {

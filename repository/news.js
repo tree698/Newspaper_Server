@@ -90,11 +90,11 @@ export const updateClassification = async (id, classification) => {
   return result;
 };
 
-// expection 수정
-export const updateExpection = async (id, expection) => {
+// background 수정
+export const updateBackground = async (id, background) => {
   const [result] = await pool.query(
-    'UPDATE news SET expection = ? WHERE id = ?',
-    [expection, id]
+    'UPDATE news SET background = ? WHERE id = ?',
+    [background, id]
   );
   return result;
 };
@@ -115,14 +115,24 @@ export const addArticle = async ({
   date,
   language,
   summary,
+  keyword,
+  classification,
+  background,
   memo,
-  ranking,
-  url,
-  image,
 }) => {
   const [result] = await pool.query(
-    'INSERT INTO news (name, title, date, language, summary, memo, ranking, url, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-    [name, title, date, language, summary, memo, ranking, url, image]
+    'INSERT INTO news (name, title, date, language, summary, keyword, classification, background, memo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    [
+      name,
+      title,
+      date,
+      language,
+      summary,
+      keyword,
+      classification,
+      background,
+      memo,
+    ]
   );
   return result;
 };
@@ -133,10 +143,10 @@ export const deleteArticleById = async (id) => {
   return result;
 };
 
-// Get detailed data (summary, keyword, classification, expection, memo) by ID
+// Get detailed data (summary, keyword, classification, background, memo) by ID
 export const getArticleDetailsById = async (id) => {
   const [rows] = await pool.query(
-    'SELECT summary, keyword, classification, expection, memo FROM news WHERE id = ?',
+    'SELECT summary, keyword, classification, background, memo FROM news WHERE id = ?',
     [id]
   );
   return rows[0]; // Return the first row (should be the only one)
