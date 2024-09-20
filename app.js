@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import helmet from 'helmet';
-import newsRoute from './routes/news.js'; // news 라우트 추가
+import newsRoute from './news_routes.js'; // news 라우트 추가
 import { config } from './config.js';
 
 const app = express();

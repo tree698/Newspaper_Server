@@ -13,7 +13,7 @@ import {
   addArticle,
   deleteArticleById,
   getArticleDetailsById,
-} from '../repository/news.js';
+} from './news_repository.js';
 
 const router = express.Router();
 
@@ -51,7 +51,7 @@ router.get('/searchByNameAndDate', async (req, res, next) => {
 
 // language와 date 범위로 검색
 router.get('/searchByLanguageAndDate', async (req, res, next) => {
-  const { language, startDate, endDate } = req.query; // 쿼리에서 language와 날짜 범위 가져오기
+  const { language, startDate, endDate } = req.query;
   try {
     const rows = await getArticlesByLanguageAndDate(
       language,
@@ -60,10 +60,7 @@ router.get('/searchByLanguageAndDate', async (req, res, next) => {
     );
     res.json(rows);
   } catch (error) {
-    console.error('Error fetching articles by language and date:', error); // 에러 로그 출력
-    res
-      .status(500)
-      .json({ message: 'Internal Server Error', error: error.message });
+    next(error);
   }
 });
 

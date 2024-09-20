@@ -1,5 +1,5 @@
 import mysql from 'mysql2/promise'; // 비동기 방식의 mysql2 사용
-import { config } from '../config.js';
+import { config } from './config.js';
 
 // MySQL 연결 설정
 const pool = mysql.createPool({
@@ -35,25 +35,35 @@ export const searchByTitle = async (keyword) => {
   return rows;
 };
 
-// name과 date 범위로 검색
+// name과 date 범위로 검색 (name이 'all'이면 모든 name 반환)
 export const getArticlesByNameAndDate = async (name, startDate, endDate) => {
-  const [rows] = await pool.query(
-    'SELECT * FROM news WHERE name = ? AND DATE(date) BETWEEN ? AND ? ORDER BY date DESC',
-    [name, startDate, endDate]
-  );
+  const query =
+    name === 'all'
+      ? 'SELECT * FROM news WHERE DATE(date) BETWEEN ? AND ? ORDER BY date DESC'
+      : 'SELECT * FROM news WHERE name = ? AND DATE(date) BETWEEN ? AND ? ORDER BY date DESC';
+
+  const params =
+    name === 'all' ? [startDate, endDate] : [name, startDate, endDate];
+
+  const [rows] = await pool.query(query, params);
   return rows;
 };
 
-// language와 date 범위로 검색 (날짜는 DATE()로 처리)
+// language와 date 범위로 검색 (language가 'all'이면 모든 language 반환)
 export const getArticlesByLanguageAndDate = async (
   language,
   startDate,
   endDate
 ) => {
-  const [rows] = await pool.query(
-    'SELECT * FROM news WHERE language = ? AND DATE(date) BETWEEN ? AND ? ORDER BY date DESC',
-    [language, startDate, endDate]
-  );
+  const query =
+    language === 'all'
+      ? 'SELECT * FROM news WHERE DATE(date) BETWEEN ? AND ? ORDER BY date DESC'
+      : 'SELECT * FROM news WHERE language = ? AND DATE(date) BETWEEN ? AND ? ORDER BY date DESC';
+
+  const params =
+    language === 'all' ? [startDate, endDate] : [language, startDate, endDate];
+
+  const [rows] = await pool.query(query, params);
   return rows;
 };
 
