@@ -11,7 +11,7 @@ import {
   updateBackground,
   updateKeyword,
   addArticle,
-  deleteArticleById,
+  deleteArticlesByIds,
   getArticleDetailsById,
 } from './news_repository.js';
 
@@ -156,12 +156,18 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-// id 값으로 기사 삭제
-router.delete('/:id', async (req, res, next) => {
-  const { id } = req.params;
+// 여러 id 값으로 기사 삭제
+router.delete('/deleteArticles', async (req, res, next) => {
+  const { ids } = req.body; // Expecting an array of IDs in the request body
+  if (!Array.isArray(ids) || ids.length === 0) {
+    return res.status(400).json({ message: 'Invalid IDs' });
+  }
   try {
-    const result = await deleteArticleById(id);
-    res.json({ message: 'Article deleted', affectedRows: result.affectedRows });
+    const result = await deleteArticlesByIds(ids);
+    res.json({
+      message: 'Articles deleted',
+      affectedRows: result.affectedRows,
+    });
   } catch (error) {
     next(error);
   }

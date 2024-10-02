@@ -147,9 +147,11 @@ export const addArticle = async ({
   return result;
 };
 
-// id 값으로 기사 삭제
-export const deleteArticleById = async (id) => {
-  const [result] = await pool.query('DELETE FROM news WHERE id = ?', [id]);
+// 여러 id 값으로 기사 삭제
+export const deleteArticlesByIds = async (ids) => {
+  const placeholders = ids.map(() => '?').join(', ');
+  const query = `DELETE FROM news WHERE id IN (${placeholders})`;
+  const [result] = await pool.query(query, ids);
   return result;
 };
 
