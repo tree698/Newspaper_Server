@@ -39,8 +39,8 @@ export const searchByTitle = async (keyword) => {
 export const getArticlesByNameAndDate = async (name, startDate, endDate) => {
   const query =
     name === 'all'
-      ? 'SELECT * FROM news WHERE DATE(date) BETWEEN ? AND ? ORDER BY date DESC'
-      : 'SELECT * FROM news WHERE name = ? AND DATE(date) BETWEEN ? AND ? ORDER BY date DESC';
+      ? 'SELECT * FROM news WHERE DATE(date) >= DATE(?) AND DATE(date) <= DATE(?) ORDER BY date DESC'
+      : 'SELECT * FROM news WHERE name = ? AND DATE(date) >= DATE(?) AND DATE(date) <= DATE(?) ORDER BY date DESC';
 
   const params =
     name === 'all' ? [startDate, endDate] : [name, startDate, endDate];
@@ -57,8 +57,8 @@ export const getArticlesByLanguageAndDate = async (
 ) => {
   const query =
     language === 'all'
-      ? 'SELECT * FROM news WHERE DATE(date) BETWEEN ? AND ? ORDER BY date DESC'
-      : 'SELECT * FROM news WHERE language = ? AND DATE(date) BETWEEN ? AND ? ORDER BY date DESC';
+      ? 'SELECT * FROM news WHERE DATE(date) >= DATE(?) AND DATE(date) <= DATE(?) ORDER BY date DESC'
+      : 'SELECT * FROM news WHERE language = ? AND DATE(date) >= DATE(?) AND DATE(date) <= DATE(?) ORDER BY date DESC';
 
   const params =
     language === 'all' ? [startDate, endDate] : [language, startDate, endDate];
