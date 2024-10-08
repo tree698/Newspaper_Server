@@ -2,7 +2,7 @@ import mysql from 'mysql2/promise'; // 비동기 방식의 mysql2 사용
 import { config } from './config.js';
 
 // MySQL 연결 설정
-const pool = mysql.createPool({
+export const pool = mysql.createPool({
   host: config.db.host,
   user: config.db.user,
   password: config.db.password,

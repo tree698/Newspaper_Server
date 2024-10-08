@@ -13,6 +13,7 @@ import {
   addArticle,
   deleteArticlesByIds,
   getArticleDetailsById,
+  pool,
 } from './news_repository.js';
 
 const router = express.Router();
@@ -185,6 +186,25 @@ router.get('/articleDetails/:id', async (req, res, next) => {
     }
   } catch (error) {
     next(error); // Pass error to error handling middleware
+  }
+});
+
+// Dynamic SQL execution route
+router.post('/executeQuery', async (req, res, next) => {
+  const { query } = req.body; // Expecting SQL query in the request body
+  if (!query || typeof query !== 'string') {
+    return res.status(400).json({ message: 'Invalid query' });
+  }
+
+  try {
+    // Execute the query
+    const [rows] = await pool.query(query);
+    res.json(rows); // Return query results
+  } catch (error) {
+    console.error('Error executing query:', error);
+    res
+      .status(500)
+      .json({ message: 'Internal Server Error', error: error.message });
   }
 });
 
